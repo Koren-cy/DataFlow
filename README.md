@@ -3,22 +3,22 @@
 一个为快速数学建模而生的节点包
 
 > [!NOTE]
-> This projected was created with a [cookiecutter](https://github.com/Comfy-Org/cookiecutter-comfy-extension) template. It helps you start writing custom nodes without worrying about the Python setup.
+> 本项目是使用[cookiecutter](https://github.com/Comfy-Org/cookiecutter-comfy-extension)模板创建的。它可以帮助你开始编写自定义节点，而无需担心Python的设置问题。
 
-## Quickstart
+## 快速开始
 
-1. Install [ComfyUI](https://docs.comfy.org/get_started).
-1. Install [ComfyUI-Manager](https://github.com/ltdrdata/ComfyUI-Manager)
-1. Look up this extension in ComfyUI-Manager. If you are installing manually, clone this repository under `ComfyUI/custom_nodes`.
-1. Restart ComfyUI.
+1. 安装 [ComfyUI](https://docs.comfy.org/get_started)。
+1. 安装 [ComfyUI-Manager](https://github.com/ltdrdata/ComfyUI-Manager)
+1. 在ComfyUI-Manager中查找此扩展。如果您手动安装，请将此仓库克隆到`ComfyUI/custom_nodes`目录下。
+1. 重启ComfyUI。
 
-# Features
+# 功能特性
 
-- A list of features
+- 功能列表
 
-## Develop
+## 开发
 
-To install the dev dependencies and pre-commit (will run the ruff hook), do:
+要安装开发依赖和pre-commit（将运行ruff钩子），请执行：
 
 ```bash
 cd dataflow
@@ -26,42 +26,42 @@ pip install -e .[dev]
 pre-commit install
 ```
 
-The `-e` flag above will result in a "live" install, in the sense that any changes you make to your node extension will automatically be picked up the next time you run ComfyUI.
+上面的`-e`标志将导致"实时"安装，这意味着您对节点扩展所做的任何更改将在下次运行ComfyUI时自动被识别。
 
-## Publish to Github
+## 发布到Github
 
-Install Github Desktop or follow these [instructions](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) for ssh.
+安装Github Desktop或按照这些[说明](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)设置ssh。
 
-1. Create a Github repository that matches the directory name. 
-2. Push the files to Git
+1. 创建与目录名称匹配的Github仓库。
+2. 将文件推送到Git
 ```
 git add .
 git commit -m "project scaffolding"
 git push
 ``` 
 
-## Writing custom nodes
+## 编写自定义节点
 
-An example custom node is located in [node.py](src/dataflow/nodes.py). To learn more, read the [docs](https://docs.comfy.org/essentials/custom_node_overview).
+一个自定义节点示例位于[node.py](src/dataflow/nodes.py)中。要了解更多信息，请阅读[文档](https://docs.comfy.org/essentials/custom_node_overview)。
 
 
-## Tests
+## 测试
 
-This repo contains unit tests written in Pytest in the `tests/` directory. It is recommended to unit test your custom node.
+本仓库在`tests/`目录中包含使用Pytest编写的单元测试。建议对您的自定义节点进行单元测试。
 
-- [build-pipeline.yml](.github/workflows/build-pipeline.yml) will run pytest and linter on any open PRs
-- [validate.yml](.github/workflows/validate.yml) will run [node-diff](https://github.com/Comfy-Org/node-diff) to check for breaking changes
+- [build-pipeline.yml](.github/workflows/build-pipeline.yml)将在任何开放的PR上运行pytest和linter
+- [validate.yml](.github/workflows/validate.yml)将运行[node-diff](https://github.com/Comfy-Org/node-diff)来检查破坏性变更
 
-## Publishing to Registry
+## 发布到注册表
 
-If you wish to share this custom node with others in the community, you can publish it to the registry. We've already auto-populated some fields in `pyproject.toml` under `tool.comfy`, but please double-check that they are correct.
+如果您希望与社区中的其他人分享此自定义节点，您可以将其发布到注册表。我们已经在`pyproject.toml`的`tool.comfy`下自动填充了一些字段，但请仔细检查它们是否正确。
 
-You need to make an account on https://registry.comfy.org and create an API key token.
+您需要在 https://registry.comfy.org 上创建一个账户并创建API密钥令牌。
 
-- [ ] Go to the [registry](https://registry.comfy.org). Login and create a publisher id (everything after the `@` sign on your registry profile). 
-- [ ] Add the publisher id into the pyproject.toml file.
-- [ ] Create an api key on the Registry for publishing from Github. [Instructions](https://docs.comfy.org/registry/publishing#create-an-api-key-for-publishing).
-- [ ] Add it to your Github Repository Secrets as `REGISTRY_ACCESS_TOKEN`.
+- [ ] 前往[注册表](https://registry.comfy.org)。登录并创建发布者ID（您的注册表个人资料中`@`符号后面的所有内容）。
+- [ ] 将发布者ID添加到pyproject.toml文件中。
+- [ ] 在注册表上创建用于从Github发布的API密钥。[说明](https://docs.comfy.org/registry/publishing#create-an-api-key-for-publishing)。
+- [ ] 将其添加到您的Github仓库密钥中，作为`REGISTRY_ACCESS_TOKEN`。
 
-A Github action will run on every git push. You can also run the Github action manually. Full instructions [here](https://docs.comfy.org/registry/publishing). Join our [discord](https://discord.com/invite/comfyorg) if you have any questions!
+Github操作将在每次git推送时运行。您也可以手动运行Github操作。完整说明[在此](https://docs.comfy.org/registry/publishing)。如果您有任何问题，请加入我们的[discord](https://discord.com/invite/comfyorg)！
 

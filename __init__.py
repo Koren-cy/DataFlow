@@ -1,4 +1,4 @@
-"""Top-level package for dataflow."""
+"""dataflow 的顶层包。"""
 
 __all__ = [
     "NODE_CLASS_MAPPINGS",

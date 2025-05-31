@@ -1,15 +1,15 @@
-* dataflow version:
-* Python version:
-* Operating System:
+* dataflow版本：
+* Python版本：
+* 操作系统：
 
-### Description
+### 描述
 
-Describe what you were trying to get done.
-Tell us what happened, what went wrong, and what you expected to happen.
+描述您尝试完成的任务。
+告诉我们发生了什么，出了什么问题，以及您期望发生什么。
 
-### What I Did
+### 我做了什么
 
 ```
-Paste the command(s) you ran and the output.
-If there was a crash, please include the traceback here.
+粘贴您运行的命令和输出。
+如果发生崩溃，请在此处包含回溯信息。
 ```
