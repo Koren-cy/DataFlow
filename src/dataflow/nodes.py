@@ -1,4 +1,4 @@
-from Example import *
+from .Example import *
 
 
 # 一个包含所有要导出的节点及其名称的字典
