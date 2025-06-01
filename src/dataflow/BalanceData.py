@@ -8,11 +8,11 @@ class BalanceData:
     """
     处理数据不平衡问题
     
-    支持多种采样方法：
-    - 随机过采样：对少数类进行随机重复采样
-    - 随机欠采样：对多数类进行随机删除采样
-    - SMOTE过采样：使用合成少数类过采样技术（需要安装imbalanced-learn）
-    - 组合采样：先过采样后欠采样
+    支持多种采样方法:
+    - 随机过采样:对少数类进行随机重复采样
+    - 随机欠采样:对多数类进行随机删除采样
+    - SMOTE过采样:使用合成少数类过采样技术 (需要安装imbalanced-learn)
+    - 组合采样:先过采样后欠采样
     """
     def __init__(self):
         pass
@@ -25,11 +25,11 @@ class BalanceData:
                 "目标列": ("STRING", {
                     "multiline": False,
                     "default": "",
-                    "tooltip": "用于判断类别平衡的目标列名"
+                    "tooltip": "用于判断样本类别的目标列名"
                 }),
                 "采样方法": (["随机过采样", "随机欠采样", "SMOTE过采样", "组合采样"], {
                     "default": "随机过采样",
-                    "tooltip": "随机过采样: 重复少数类样本\n随机欠采样: 删除多数类样本\nSMOTE过采样: 合成新的少数类样本\n组合采样: 先过采样后欠采样"
+                    "tooltip": "随机过采样: 重复少数类样本\n随机欠采样: 删除多数类样本\nSMOTE过采样: 合成新的少数类样本\n组合采样: 先SMOTE过采样, 再随机欠采样"
                 }),
             },
             "optional": {
@@ -41,7 +41,7 @@ class BalanceData:
                     "default": 42,
                     "min": 0,
                     "max": 9999,
-                    "tooltip": "随机种子，用于结果可重现"
+                    "tooltip": "随机种子, 用于结果可重现"
                 }),
                 "k近邻数": ("INT", {
                     "default": 5,
@@ -53,7 +53,7 @@ class BalanceData:
         }
 
     RETURN_TYPES = ("DATAFRAME", "STRING")
-    RETURN_NAMES = ("平衡后数据帧", "采样信息")
+    RETURN_NAMES = ("数据帧", "采样信息")
     DESCRIPTION = cleandoc(__doc__)
     FUNCTION = "process"
 
@@ -70,42 +70,18 @@ class BalanceData:
         X = 数据帧.drop(columns=[目标列])
         y = 数据帧[目标列]
         
-        # 统计原始类别分布
-        original_distribution = Counter(y)
-        info_lines = ["=== 数据平衡处理信息 ==="]
-        info_lines.append(f"原始类别分布: {dict(original_distribution)}")
-        info_lines.append(f"采样方法: {采样方法}")
-        info_lines.append(f"采样策略: {采样策略}")
+        if 采样方法 == "随机过采样":
+            X_resampled, y_resampled = self._random_oversample(X, y, 采样策略, 随机种子)
+        elif 采样方法 == "随机欠采样":
+            X_resampled, y_resampled = self._random_undersample(X, y, 采样策略, 随机种子)
+        elif 采样方法 == "SMOTE过采样":
+            X_resampled, y_resampled = self._smote_oversample(X, y, 采样策略, 随机种子, k近邻数)
+        elif 采样方法 == "组合采样":
+            X_resampled, y_resampled = self._combined_sampling(X, y, 采样策略, 随机种子, k近邻数)
+        else:
+            raise ValueError(f"不支持的采样方法: {采样方法}")
         
-        try:
-            if 采样方法 == "随机过采样":
-                X_resampled, y_resampled = self._random_oversample(X, y, 采样策略, 随机种子)
-            elif 采样方法 == "随机欠采样":
-                X_resampled, y_resampled = self._random_undersample(X, y, 采样策略, 随机种子)
-            elif 采样方法 == "SMOTE过采样":
-                X_resampled, y_resampled = self._smote_oversample(X, y, 采样策略, 随机种子, k近邻数)
-            elif 采样方法 == "组合采样":
-                X_resampled, y_resampled = self._combined_sampling(X, y, 采样策略, 随机种子, k近邻数)
-            else:
-                raise ValueError(f"不支持的采样方法: {采样方法}")
-            
-            # 重新组合数据
-            balanced_df = pd.concat([X_resampled, y_resampled], axis=1)
-            
-            # 统计处理后的类别分布
-            new_distribution = Counter(y_resampled)
-            info_lines.append(f"处理后类别分布: {dict(new_distribution)}")
-            info_lines.append(f"数据量变化: {len(数据帧)} -> {len(balanced_df)}")
-            
-            sampling_info = "\n".join(info_lines)
-            
-            return (balanced_df, sampling_info)
-            
-        except ImportError as e:
-            if "imbalanced" in str(e).lower():
-                raise ImportError("SMOTE过采样需要安装 imbalanced-learn 库。请运行: pip install imbalanced-learn")
-            else:
-                raise e
+        return (pd.concat([X_resampled, y_resampled], axis=1), )
     
     def _random_oversample(self, X, y, strategy, random_state):
         """随机过采样"""
@@ -195,7 +171,7 @@ class BalanceData:
         # 确保所有特征都是数值型
         numeric_columns = X.select_dtypes(include=[np.number]).columns
         if len(numeric_columns) != len(X.columns):
-            raise ValueError("SMOTE算法要求所有特征都是数值型，请先进行数据预处理")
+            raise ValueError("SMOTE算法要求所有特征都是数值型, 请先进行数据预处理")
         
         smote = SMOTE(sampling_strategy=strategy, random_state=random_state, k_neighbors=k_neighbors)
         X_resampled, y_resampled = smote.fit_resample(X, y)
@@ -207,7 +183,7 @@ class BalanceData:
         return X_resampled, y_resampled
     
     def _combined_sampling(self, X, y, strategy, random_state, k_neighbors):
-        """组合采样：先SMOTE过采样，再随机欠采样"""
+        """组合采样:先SMOTE过采样, 再随机欠采样"""
         try:
             from imblearn.combine import SMOTETomek
         except ImportError:
@@ -216,7 +192,7 @@ class BalanceData:
         # 确保所有特征都是数值型
         numeric_columns = X.select_dtypes(include=[np.number]).columns
         if len(numeric_columns) != len(X.columns):
-            raise ValueError("组合采样算法要求所有特征都是数值型，请先进行数据预处理")
+            raise ValueError("组合采样算法要求所有特征都是数值型, 请先进行数据预处理")
         
         combined = SMOTETomek(sampling_strategy=strategy, random_state=random_state, 
                              smote=SMOTE(k_neighbors=k_neighbors, random_state=random_state))
