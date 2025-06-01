@@ -42,4 +42,4 @@ class DropNA:
             if invalid_cols:
                 raise ValueError(f"列名不存在: {invalid_cols}")
         
-        return (数据帧.dropna(子集=subset_cols, how=方式),)
+        return (数据帧.dropna(subset=subset_cols, how=方式),)
