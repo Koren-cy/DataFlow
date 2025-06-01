@@ -13,7 +13,8 @@ readme = "README.md"
 license = {text = "MIT license"}
 classifiers = []
 dependencies = [
-
+    "pandas>=1.3.0",
+    "scikit-learn>=1.0.0",
 ]
 
 [project.optional-dependencies]

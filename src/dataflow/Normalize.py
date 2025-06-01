@@ -1,0 +1,100 @@
+from inspect import cleandoc
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
+
+
+class Normalize:
+    """
+    对DataFrame中的数值列进行归一化处理
+    
+    支持多种归一化方法：
+    - MinMax: 将数据缩放到[0,1]范围
+    - Standard: 标准化（z-score），均值为0，标准差为1
+    - Robust: 使用中位数和四分位数进行缩放，对异常值更鲁棒
+    - MaxAbs: 按最大绝对值缩放，数据范围为[-1,1]
+    """
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "数据帧": ("DATAFRAME", {}),
+                "归一化方法": (["MinMax", "Standard", "Robust", "MaxAbs"], {
+                    "default": "MinMax",
+                    "tooltip": "MinMax: 缩放到[0,1]\nStandard: 标准化(z-score)\nRobust: 基于中位数和四分位数\nMaxAbs: 按最大绝对值缩放"
+                }),
+            },
+            "optional": {
+                "指定列": ("STRING", {
+                    "multiline": False,
+                    "default": "",
+                    "tooltip": "要归一化的列名，多个列名用逗号分隔。留空则处理所有数值列"
+                }),
+                "特征范围最小值": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -10.0,
+                    "max": 10.0,
+                    "step": 0.1,
+                    "tooltip": "仅用于MinMax方法，设置缩放后的最小值"
+                }),
+                "特征范围最大值": ("FLOAT", {
+                    "default": 1.0,
+                    "min": -10.0,
+                    "max": 10.0,
+                    "step": 0.1,
+                    "tooltip": "仅用于MinMax方法，设置缩放后的最大值"
+                }),
+            },
+        }
+
+    RETURN_TYPES = ("DATAFRAME",)
+    RETURN_NAMES = ("数据帧",)
+    DESCRIPTION = cleandoc(__doc__)
+    FUNCTION = "normalize"
+
+    CATEGORY = "数学建模/数据预处理"
+
+    def normalize(self, 数据帧, 归一化方法="MinMax", 指定列="", 特征范围最小值=0.0, 特征范围最大值=1.0):
+        # 复制数据帧以避免修改原始数据
+        df = 数据帧.copy()
+        
+        # 确定要处理的列
+        if 指定列.strip():
+            # 用户指定了列
+            target_cols = [col.strip() for col in 指定列.split(',') if col.strip()]
+            # 检查列是否存在
+            invalid_cols = [col for col in target_cols if col not in df.columns]
+            if invalid_cols:
+                raise ValueError(f"列名不存在: {invalid_cols}")
+            # 检查列是否为数值类型
+            non_numeric_cols = [col for col in target_cols if not pd.api.types.is_numeric_dtype(df[col])]
+            if non_numeric_cols:
+                raise ValueError(f"以下列不是数值类型，无法归一化: {non_numeric_cols}")
+        else:
+            # 自动选择所有数值列
+            target_cols = df.select_dtypes(include=['number']).columns.tolist()
+            if not target_cols:
+                raise ValueError("数据帧中没有数值列可以进行归一化")
+        
+        # 检查是否有空值
+        if df[target_cols].isnull().any().any():
+            raise ValueError(f"目标列中存在缺失值，请先处理缺失值。含缺失值的列: {df[target_cols].columns[df[target_cols].isnull().any()].tolist()}")
+        
+        # 选择归一化方法
+        if 归一化方法 == "MinMax":
+            scaler = MinMaxScaler(feature_range=(特征范围最小值, 特征范围最大值))
+        elif 归一化方法 == "Standard":
+            scaler = StandardScaler()
+        elif 归一化方法 == "Robust":
+            scaler = RobustScaler()
+        elif 归一化方法 == "MaxAbs":
+            scaler = MaxAbsScaler()
+        else:
+            raise ValueError(f"不支持的归一化方法: {归一化方法}")
+        
+        # 执行归一化
+        df[target_cols] = scaler.fit_transform(df[target_cols])
+        
+        return (df,)
