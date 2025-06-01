@@ -20,7 +20,8 @@ class ReadCSV:
             },
         }
 
-    RETURN_TYPES = ("DataFrame",)
+    RETURN_TYPES = ("DATAFRAME",)
+    RETURN_NAMES = ("数据帧",)
     DESCRIPTION = cleandoc(__doc__)
     FUNCTION = "process"
 
