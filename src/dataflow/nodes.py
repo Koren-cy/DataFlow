@@ -17,5 +17,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "Example": "示例节点",
     "ReadCSV": "读取CSV文件",
     "ShowAny": "以文本显示",
-    "DropNA": "删除缺失值行",
+    "DropNA": "删除含缺失值的行",
 }

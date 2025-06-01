@@ -12,17 +12,17 @@ class DropNA:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "dataframe": ("DATAFRAME", {}),
+                "数据帧": ("DATAFRAME", {}),
             },
             "optional": {
-                "subset": ("STRING", {
+                "子集": ("STRING", {
                     "multiline": False,
                     "default": "",
                     "tooltip": "指定列名，多个列名用逗号分隔。留空则检查所有列"
                 }),
-                "how": (["any", "all"], {
+                "方式": (["any", "all"], {
                     "default": "any",
-                    "tooltip": "any: 任一列有缺失值就删除该行; all: 所有列都有缺失值才删除该行"
+                    "tooltip": "any: 任一列有缺失值就删除该行\nall: 所有列都有缺失值才删除该行"
                 }),
             },
         }
@@ -34,17 +34,12 @@ class DropNA:
 
     CATEGORY = "数学建模/数据预处理"
 
-    def process(self, dataframe, subset="", how="any"):
-        # 处理subset参数
+    def process(self, 数据帧, 子集="", 方式="any"):
         subset_cols = None
-        if subset.strip():
-            subset_cols = [col.strip() for col in subset.split(',') if col.strip()]
-            # 验证列名是否存在
-            invalid_cols = [col for col in subset_cols if col not in dataframe.columns]
+        if 子集.strip():
+            subset_cols = [col.strip() for col in 子集.split(',') if col.strip()]
+            invalid_cols = [col for col in 子集 if col not in 数据帧.columns]
             if invalid_cols:
                 raise ValueError(f"列名不存在: {invalid_cols}")
         
-        # 删除含缺失值的行
-        cleaned_df = dataframe.dropna(subset=subset_cols, how=how)
-        
-        return (cleaned_df,)
+        return (数据帧.dropna(子集=subset_cols, how=方式),)

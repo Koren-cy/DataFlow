@@ -28,5 +28,5 @@ class ReadCSV:
     CATEGORY = "数学建模/数据采集"
 
     def process(self, file_path):
-        df = pd.read_csv(file_path)
-        return (df,)
+        dataframe = pd.read_csv(file_path)
+        return (dataframe,)
