@@ -18,7 +18,7 @@ class DropNA:
                 "子集": ("STRING", {
                     "multiline": False,
                     "default": "",
-                    "tooltip": "指定列名，多个列名用逗号分隔。留空则检查所有列"
+                    "tooltip": "关注的列。\n指定列名，多个列名用逗号分隔。留空则检查所有列"
                 }),
                 "方式": (["any", "all"], {
                     "default": "any",
