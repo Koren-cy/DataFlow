@@ -14,7 +14,7 @@ class ReadCSV:
         return {
             "required": {
                 "file_path": ("STRING", {
-                    "multiline": True,
+                    "multiline": False,
                     "default": ""
                 }),
             },
