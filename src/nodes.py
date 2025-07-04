@@ -3,6 +3,7 @@ from .Nodes.DropINF import *
 from .Nodes.DropNA import *
 from .Nodes.Example import *
 from .Nodes.Normalize import *
+from .Nodes.PCA import *
 from .Nodes.ReadCSV import *
 from .Nodes.SelectColumns import *
 from .Nodes.ShowAny import *
@@ -19,6 +20,7 @@ NODE_CLASS_MAPPINGS = {
     "DropNA": DropNA,
     "Example": Example,
     "Normalize": Normalize,
+    "PCA": PCA,
     "ReadCSV": ReadCSV,
     "SelectColumns": SelectColumns,
     "ShowAny": ShowAny,
@@ -35,6 +37,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "DropNA": "删除含缺失值的行",
     "Example": "示例节点",
     "Normalize": "数据标准化",
+    "PCA": "PCA降维",
     "ReadCSV": "读取CSV文件",
     "SelectColumns": "选择指定列",
     "ShowAny": "以文本显示",

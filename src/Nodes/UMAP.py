@@ -1,12 +1,6 @@
 from inspect import cleandoc
 import pandas as pd
-
-try:
-    from cuml import UMAP as GPU_UMAP
-    GPU_AVAILABLE = True
-except ImportError:
-    import umap
-    GPU_AVAILABLE = False
+from umap import UMAP
 
 class Umap:
     """
@@ -63,20 +57,12 @@ class Umap:
         if data.shape[1] < 2:
             raise ValueError("数据帧中数值列数量不足,无法进行降维")
 
-        if GPU_AVILABLE:
-            reducer = GPU_UMAP(
-                n_neighbors=近邻数量,
-                n_components=目标维度,
-                min_dist=最小距离,
-                random_state=42
-            )
-        else:
-            reducer = umap.UMAP(
-                n_neighbors=近邻数量,
-                n_components=目标维度,
-                min_dist=最小距离,
-                random_state=42
-            )
+        reducer = UMAP(
+            n_neighbors=近邻数量,
+            n_components=目标维度,
+            min_dist=最小距离,
+            random_state=42
+        )
 
         # 执行降维
         embedding = reducer.fit_transform(numeric_df)

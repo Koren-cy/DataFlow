@@ -28,5 +28,5 @@ class ReadCSV:
     CATEGORY = "数学建模/数据采集"
 
     def process(self, 文件路径):
-        dataframe = pd.read_csv(文件路径)
+        dataframe = pd.read_csv(文件路径.strip('\'\" '))
         return (dataframe,)

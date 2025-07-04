@@ -16,7 +16,7 @@ class BalanceData:
         return {
             "required": {
                 "数据帧": ("DATAFRAME", {}),
-                "目标列": ("STRING", {
+                "标签列": ("STRING", {
                     "multiline": False,
                     "default": "",
                     "tooltip": "用于判断样本类别以进行平衡采样的的目标列的列名"
@@ -47,16 +47,16 @@ class BalanceData:
 
     CATEGORY = "数学建模/数据预处理"
 
-    def process(self, 数据帧, 目标列, 采样方法="随机过采样", 采样策略="auto", k近邻数=5):
-        if not 目标列.strip():
+    def process(self, 数据帧, 标签列, 采样方法="随机过采样", 采样策略="auto", k近邻数=5):
+        if not 标签列.strip():
             raise ValueError("请指定目标列名")
         
-        if 目标列 not in 数据帧.columns:
-            raise ValueError(f"目标列 '{目标列}' 不存在")
+        if 标签列 not in 数据帧.columns:
+            raise ValueError(f"标签列 '{标签列}' 不存在")
         
         # 分离特征和目标
-        X = 数据帧.drop(columns=[目标列])
-        y = 数据帧[目标列]
+        X = 数据帧.drop(columns=[标签列])
+        y = 数据帧[标签列]
         
         if 采样方法 == "随机过采样":
             X_resampled, y_resampled = self._random_oversample(X, y, 采样策略, 42)
