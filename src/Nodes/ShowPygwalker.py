@@ -8,9 +8,6 @@ class ShowPygwalker:
     """
     通过Pygwalker洞察数据
     """
-    def __init__(self):
-        pass
-
     @classmethod
     def INPUT_TYPES(s):
         return {

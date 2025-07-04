@@ -7,9 +7,6 @@ class DropINF:
     """
     删除含无穷值的行
     """
-    def __init__(self):
-        pass
-
     @classmethod
     def INPUT_TYPES(s):
         return {

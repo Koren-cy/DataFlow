@@ -5,9 +5,6 @@ class SelectColumns:
     """
     选择指定的列
     """
-    def __init__(self):
-        pass
-
     @classmethod
     def INPUT_TYPES(s):
         return {

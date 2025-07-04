@@ -7,9 +7,6 @@ class Normalize:
     """
     对数值列进行标准化处理
     """
-    def __init__(self):
-        pass
-
     @classmethod
     def INPUT_TYPES(s):
         return {

@@ -8,9 +8,6 @@ class ShowDOM:
     """
     通用的html可视化容器
     """
-    def __init__(self):
-        pass
-
     @classmethod
     def INPUT_TYPES(s):
         return {

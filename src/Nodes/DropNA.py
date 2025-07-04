@@ -5,9 +5,6 @@ class DropNA:
     """
     删除含缺失值的行
     """
-    def __init__(self):
-        pass
-
     @classmethod
     def INPUT_TYPES(s):
         return {

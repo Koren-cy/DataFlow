@@ -8,9 +8,6 @@ class BalanceData:
     """
     对数据进行平衡采样
     """
-    def __init__(self):
-        pass
-
     @classmethod
     def INPUT_TYPES(s):
         return {

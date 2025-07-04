@@ -6,9 +6,6 @@ class ReadCSV:
     """
     读取CSV文件
     """
-    def __init__(self):
-        pass
-
     @classmethod
     def INPUT_TYPES(s):
         return {

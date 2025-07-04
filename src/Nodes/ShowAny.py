@@ -9,9 +9,6 @@ class ShowAny:
     """
     将任意类型的数据装换成文本展示
     """
-    def __init__(self):
-        pass
-
     @classmethod
     def INPUT_TYPES(s):
         return {

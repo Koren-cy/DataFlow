@@ -5,4 +5,8 @@
     "/PATH/TO/ComfyUI/",
     "/PATH/TO/ComfyUI/custom_nodes/"
   ],
+  "cursorpyright.analysis.extraPaths": [
+    "/PATH/TO/ComfyUI/",
+    "/PATH/TO/ComfyUI/custom_nodes/"
+  ],
 }
