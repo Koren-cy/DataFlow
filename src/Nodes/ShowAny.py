@@ -1,8 +1,6 @@
-from inspect import cleandoc
-
-
-import json
 from comfy.comfy_types.node_typing import IO
+from inspect import cleandoc
+import json
 
 
 class ShowAny:
@@ -16,7 +14,7 @@ class ShowAny:
         }
 
     RETURN_TYPES = ()
-    DESCRIPTION = cleandoc(__doc__)
+    DESCRIPTION = cleandoc(__doc__ or "")
     FUNCTION = "process"
     OUTPUT_NODE = True
 

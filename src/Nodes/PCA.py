@@ -48,7 +48,7 @@ class PCA:
 
     RETURN_TYPES = ("DATAFRAME",)
     RETURN_NAMES = ("数据帧",)
-    DESCRIPTION = cleandoc(__doc__)
+    DESCRIPTION = cleandoc(__doc__ or "")
     FUNCTION = "process"
 
     CATEGORY = "数学建模/降维算法"

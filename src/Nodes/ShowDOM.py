@@ -19,7 +19,7 @@ class ShowDOM:
         }
 
     RETURN_TYPES = ()
-    DESCRIPTION = cleandoc(__doc__)
+    DESCRIPTION = cleandoc(__doc__ or "")
     FUNCTION = "process"
     OUTPUT_NODE = True
 

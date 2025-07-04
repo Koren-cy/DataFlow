@@ -76,7 +76,7 @@ class Example:
 
     RETURN_TYPES = ("IMAGE",)
     #RETURN_NAMES = ("image_output_name",)
-    DESCRIPTION = cleandoc(__doc__)
+    DESCRIPTION = cleandoc(__doc__ or "")
     FUNCTION = "test"
 
     #OUTPUT_NODE = False
