@@ -59,7 +59,7 @@ class BalanceData:
 
     CATEGORY = "数学建模/数据预处理"
 
-    def process(self, 数据帧, 目标列, 采样方法, 采样策略, 随机种子, k近邻数):
+    def process(self, 数据帧, 目标列, 采样方法="随机过采样", 采样策略="auto", 随机种子=42, k近邻数=5):
         if not 目标列.strip():
             raise ValueError("请指定目标列名")
         
@@ -81,7 +81,7 @@ class BalanceData:
         else:
             raise ValueError(f"不支持的采样方法: {采样方法}")
         
-        return (pd.concat([X_resampled, y_resampled], axis=1), "hello")
+        return (pd.concat([X_resampled, y_resampled], axis=1), )
     
     def _random_oversample(self, X, y, strategy, random_state):
         """随机过采样"""
