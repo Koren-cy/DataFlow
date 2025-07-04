@@ -13,7 +13,7 @@ from ..Helper.visualization import Visualization
 
 class PCA:
     """
-    使用主成分分析(PCA)进行降维。
+    主成分分析（PCA）是一种无监督的线性降维技术，旨在通过正交变换将高维数据投影到低维空间，同时最大化保留数据的方差。PCA能有效减少特征冗余、去除噪声，并便于数据可视化或后续分析，但假设数据呈线性分布且对尺度敏感，通常需先标准化处理。
     """
     @classmethod
     def INPUT_TYPES(s):
@@ -25,11 +25,11 @@ class PCA:
                     "min": 1,
                     "max": 100,
                     "step": 1,
-                    "tooltip": "降维后的目标维度"
+                    "tooltip": "降维后的维度"
                 }),
                 "可视化类型": (["全部", "碎石图", "散点图", "热力图", "双标图"], {
                     "default": "全部",
-                    "tooltip": "选择要生成的可视化类型"
+                    "tooltip": "选择要可视化类型"
                 }),
             },
             "optional": {
@@ -38,10 +38,10 @@ class PCA:
                     "default": "",
                     "tooltip": "要进行PCA的列名，多个列名用逗号分隔。留空则处理所有数值列"
                 }),
-                "类别列": ("STRING", {
+                "标签列": ("STRING", {
                     "multiline": False,
                     "default": "",
-                    "tooltip": "用于区分数据类别的列名。不同类别将用不同颜色表示"
+                    "tooltip": "标签列列名。可视化中不同类别将用不同颜色表示"
                 }),
             },
         }
@@ -54,15 +54,15 @@ class PCA:
     CATEGORY = "数学建模/降维算法"
 
 
-    def process(self, 数据帧, 目标维度=2, 指定列="", 可视化类型="全部", 类别列=""):
+    def process(self, 数据帧, 目标维度=2, 指定列="", 可视化类型="全部", 标签列=""):
         df = 数据帧.copy()
         
         # 处理类别标签
         labels = None
-        if 类别列.strip():
-            if 类别列.strip() not in df.columns:
-                raise ValueError(f"类别列 '{类别列}' 不存在")
-            labels = df[类别列.strip()].values
+        if 标签列.strip():
+            if 标签列.strip() not in df.columns:
+                raise ValueError(f"标签列 '{标签列}' 不存在")
+            labels = df[标签列.strip()].values
         
         # 确定要处理的列
         if 指定列.strip():
@@ -74,9 +74,9 @@ class PCA:
             if non_numeric_cols:
                 raise ValueError(f"以下列不是数值类型，无法进行PCA: {non_numeric_cols}")
         else:
-            # 自动选择所有数值列，排除类别列
+            # 自动选择所有数值列，排除标签列
             numeric_cols = df.select_dtypes(include=['number']).columns.tolist()
-            target_cols = [col for col in numeric_cols if col != 类别列.strip()]
+            target_cols = [col for col in numeric_cols if col != 标签列.strip()]
             if not target_cols:
                 raise ValueError("数据帧中没有数值列可以进行PCA")
         
@@ -110,7 +110,7 @@ class PCA:
                 plt.title('PCA碎石图', fontsize=14, pad=20)
                 plt.legend(prop={'size': 10})
                 plt.grid(True)
-                plt.savefig(os.path.join(self.save_path, 'scree_plot.png'), dpi=300, bbox_inches='tight')
+                plt.savefig(os.path.join(self.save_path, '碎石图.svg'), dpi=300, bbox_inches='tight')
                 plt.close()
 
             def plot_scatter(self, transformed_data, labels=None):
@@ -142,7 +142,7 @@ class PCA:
                     plt.title('PCA 2D散点图', fontsize=14, pad=20)
                     plt.grid(True)
                     plt.tight_layout()
-                    plt.savefig(os.path.join(self.save_path, 'scatter_2d.png'), dpi=300, bbox_inches='tight')
+                    plt.savefig(os.path.join(self.save_path, '2D散点图.svg'), dpi=300, bbox_inches='tight')
                     plt.close()
 
                 if transformed_data.shape[1] >= 3:
@@ -172,7 +172,7 @@ class PCA:
                     ax.set_zlabel('PC3', fontsize=12)
                     ax.set_title('PCA 3D散点图', fontsize=14, pad=20)
                     plt.tight_layout()
-                    plt.savefig(os.path.join(self.save_path, 'scatter_3d.png'), dpi=300, bbox_inches='tight')
+                    plt.savefig(os.path.join(self.save_path, '3D散点图.svg'), dpi=300, bbox_inches='tight')
                     plt.close()
 
             def plot_heatmap(self, pca, feature_names):
@@ -191,7 +191,7 @@ class PCA:
                 plt.xlabel('主成分', fontsize=12)
                 plt.ylabel('特征', fontsize=12)
                 plt.tight_layout()
-                plt.savefig(os.path.join(self.save_path, 'heatmap.png'), dpi=300, bbox_inches='tight')
+                plt.savefig(os.path.join(self.save_path, '特征贡献度热力图.svg'), dpi=300, bbox_inches='tight')
                 plt.close()
 
             def plot_biplot(self, pca, transformed_data, feature_names, labels=None):
@@ -243,7 +243,7 @@ class PCA:
                 # 等比例显示
                 plt.axis('equal')
                 plt.tight_layout()
-                plt.savefig(os.path.join(self.save_path, 'biplot.png'), dpi=300, bbox_inches='tight')
+                plt.savefig(os.path.join(self.save_path, '双标图.svg'), dpi=300, bbox_inches='tight')
                 plt.close()
 
         visual = PCA_Visualization(self)
