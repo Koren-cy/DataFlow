@@ -5,13 +5,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, Ma
 
 class Normalize:
     """
-    对DataFrame中的数值列进行标准化处理
-    
-    支持多种标准化方法：
-    - MinMax: 将数据缩放到[0,1]范围
-    - Standard: 标准化（z-score），均值为0，标准差为1
-    - Robust: 使用中位数和四分位数进行缩放，对异常值更鲁棒
-    - MaxAbs: 按最大绝对值缩放，数据范围为[-1,1]
+    对数值列进行标准化处理
     """
     def __init__(self):
         pass

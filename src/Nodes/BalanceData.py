@@ -6,13 +6,7 @@ from collections import Counter
 
 class BalanceData:
     """
-    处理数据不平衡问题
-    
-    支持多种采样方法:
-    - 随机过采样:对少数类进行随机重复采样
-    - 随机欠采样:对多数类进行随机删除采样
-    - SMOTE过采样:使用合成少数类过采样技术 (需要安装imbalanced-learn)
-    - 组合采样:先过采样后欠采样
+    对数据进行平衡采样
     """
     def __init__(self):
         pass
@@ -25,7 +19,7 @@ class BalanceData:
                 "目标列": ("STRING", {
                     "multiline": False,
                     "default": "",
-                    "tooltip": "用于判断样本类别的目标列名"
+                    "tooltip": "用于判断样本类别以进行平衡采样的的目标列的列名"
                 }),
                 "采样方法": (["随机过采样", "随机欠采样", "SMOTE过采样", "组合采样"], {
                     "default": "随机过采样",
@@ -36,12 +30,6 @@ class BalanceData:
                 "采样策略": (["auto", "majority", "not minority", "not majority", "all"], {
                     "default": "auto",
                     "tooltip": "auto: 自动平衡到最大类的数量\nmajority: 只处理多数类\nnot minority: 处理除最少类外的所有类\nnot majority: 处理除最多类外的所有类\nall: 处理所有类"
-                }),
-                "随机种子": ("INT", {
-                    "default": 42,
-                    "min": 0,
-                    "max": 9999,
-                    "tooltip": "随机种子, 用于结果可重现"
                 }),
                 "k近邻数": ("INT", {
                     "default": 5,
@@ -59,7 +47,7 @@ class BalanceData:
 
     CATEGORY = "数学建模/数据预处理"
 
-    def process(self, 数据帧, 目标列, 采样方法="随机过采样", 采样策略="auto", 随机种子=42, k近邻数=5):
+    def process(self, 数据帧, 目标列, 采样方法="随机过采样", 采样策略="auto", k近邻数=5):
         if not 目标列.strip():
             raise ValueError("请指定目标列名")
         
@@ -71,13 +59,13 @@ class BalanceData:
         y = 数据帧[目标列]
         
         if 采样方法 == "随机过采样":
-            X_resampled, y_resampled = self._random_oversample(X, y, 采样策略, 随机种子)
+            X_resampled, y_resampled = self._random_oversample(X, y, 采样策略, 42)
         elif 采样方法 == "随机欠采样":
-            X_resampled, y_resampled = self._random_undersample(X, y, 采样策略, 随机种子)
+            X_resampled, y_resampled = self._random_undersample(X, y, 采样策略, 42)
         elif 采样方法 == "SMOTE过采样":
-            X_resampled, y_resampled = self._smote_oversample(X, y, 采样策略, 随机种子, k近邻数)
+            X_resampled, y_resampled = self._smote_oversample(X, y, 采样策略, 42, k近邻数)
         elif 采样方法 == "组合采样":
-            X_resampled, y_resampled = self._combined_sampling(X, y, 采样策略, 随机种子, k近邻数)
+            X_resampled, y_resampled = self._combined_sampling(X, y, 采样策略, 42, k近邻数)
         else:
             raise ValueError(f"不支持的采样方法: {采样方法}")
         

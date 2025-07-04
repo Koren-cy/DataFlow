@@ -5,7 +5,7 @@ import numpy as np
 
 class DropINF:
     """
-    删除DataFrame中含无穷值的行
+    删除含无穷值的行
     """
     def __init__(self):
         pass
@@ -22,7 +22,7 @@ class DropINF:
                     "default": "",
                     "tooltip": "关注的列。\n指定列名，多个列名用逗号分隔。留空则检查所有列"
                 }),
-                "方式": (["any", "all"], {
+                "策略": (["any", "all"], {
                     "default": "any",
                     "tooltip": "any: 任一列有无穷值就删除该行\nall: 所有列都有无穷值才删除该行"
                 }),
@@ -36,7 +36,7 @@ class DropINF:
 
     CATEGORY = "数学建模/数据预处理"
 
-    def process(self, 数据帧, 子集="", 方式="any"):
+    def process(self, 数据帧, 子集="", 策略="any"):
         subset_cols = None
         if 子集.strip():
             subset_cols = [col.strip() for col in 子集.split(',') if col.strip()]
@@ -58,10 +58,10 @@ class DropINF:
             return (df,)
         
         # 检查无穷值并删除相应行
-        if 方式 == "any":
+        if 策略 == "any":
             # 任一列有无穷值就删除该行
             mask = ~np.isinf(df[numeric_cols]).any(axis=1)
-        else:  # 方式 == "all"
+        else: 
             # 所有列都有无穷值才删除该行
             mask = ~np.isinf(df[numeric_cols]).all(axis=1)
         

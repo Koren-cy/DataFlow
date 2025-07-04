@@ -10,7 +10,7 @@ except ImportError:
 
 class Umap:
     """
-    使用UMAP算法对数据进行降维,支持GPU加速
+    使用UMAP算法对数据进行降维
     """
     def __init__(self):
         pass

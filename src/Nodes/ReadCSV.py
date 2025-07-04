@@ -13,7 +13,7 @@ class ReadCSV:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "file_path": ("STRING", {
+                "文件路径": ("STRING", {
                     "multiline": False,
                     "default": ""
                 }),
@@ -27,6 +27,6 @@ class ReadCSV:
 
     CATEGORY = "数学建模/数据采集"
 
-    def process(self, file_path):
-        dataframe = pd.read_csv(file_path)
+    def process(self, 文件路径):
+        dataframe = pd.read_csv(文件路径)
         return (dataframe,)
