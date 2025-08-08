@@ -19,12 +19,8 @@ class ShowDOM:
         }
 
     RETURN_TYPES = ()
-    DESCRIPTION = cleandoc(__doc__ or "")
-    FUNCTION = "process"
     OUTPUT_NODE = True
-
-    CATEGORY = "数学建模/可视化"
-
+    
     def process(self, x=pd.DataFrame(),y=pd.DataFrame(),data=None):
         value = ''
         if isinstance(data, str):

@@ -19,10 +19,6 @@ class ReadCSV:
 
     RETURN_TYPES = ("DATAFRAME",)
     RETURN_NAMES = ("数据帧",)
-    DESCRIPTION = cleandoc(__doc__ or "")
-    FUNCTION = "process"
-
-    CATEGORY = "数学建模/数据采集"
 
     def process(self, 文件路径):
         dataframe = pd.read_csv(文件路径.strip('\'\" '))

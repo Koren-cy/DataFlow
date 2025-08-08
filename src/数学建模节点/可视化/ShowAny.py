@@ -14,12 +14,8 @@ class ShowAny:
         }
 
     RETURN_TYPES = ()
-    DESCRIPTION = cleandoc(__doc__ or "")
-    FUNCTION = "process"
     OUTPUT_NODE = True
-
-    CATEGORY = "数学建模/可视化"
-
+    
     def process(self, source=None):
         value = 'None'
         if isinstance(source, str):

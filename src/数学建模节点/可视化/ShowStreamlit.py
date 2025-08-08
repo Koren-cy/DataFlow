@@ -16,11 +16,7 @@ class ShowStreamlit:
         }
 
     RETURN_TYPES = ()
-    DESCRIPTION = cleandoc(__doc__ or "")
-    FUNCTION = "process"
     OUTPUT_NODE = True
-
-    CATEGORY = "数学建模/可视化"
 
     def process(self, 数据帧=pd.DataFrame()):
         return {

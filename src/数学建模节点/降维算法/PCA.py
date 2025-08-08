@@ -1,19 +1,18 @@
-from inspect import cleandoc
 import pandas as pd
 import numpy as np
 from sklearn.decomposition import PCA as SklearnPCA
 import matplotlib.pyplot as plt
 import seaborn as sns
-from mpl_toolkits.mplot3d import Axes3D
 import os
-from datetime import datetime
-import matplotlib as mpl
-from ..Helper.visualization import Visualization
-
+from ...Helper.visualization import Visualization
 
 class PCA:
     """
-    主成分分析（PCA）是一种无监督的线性降维技术，旨在通过正交变换将高维数据投影到低维空间，同时最大化保留数据的方差。PCA能有效减少特征冗余、去除噪声，并便于数据可视化或后续分析，但假设数据呈线性分布且对尺度敏感，通常需先标准化处理。
+    主成分分析
+    
+    主成分分析是一种无监督的线性降维方法，旨在通过正交变换将高维数据投影到低维空间，同时最大化保留协方差。PCA能有效减少特征冗余、去除噪声，便于数据可视化与后续分析。
+    
+    如数据对尺度敏感，则需先标准化处理。
     """
     @classmethod
     def INPUT_TYPES(s):
@@ -25,36 +24,27 @@ class PCA:
                     "min": 1,
                     "max": 100,
                     "step": 1,
-                    "tooltip": "降维后的维度"
-                }),
-                "可视化类型": (["全部", "碎石图", "散点图", "热力图", "双标图"], {
-                    "default": "全部",
-                    "tooltip": "选择要可视化类型"
+                    "tooltip": "降维后的维度。"
                 }),
             },
             "optional": {
-                "指定列": ("STRING", {
+                "处理列": ("STRING", {
                     "multiline": False,
                     "default": "",
-                    "tooltip": "要进行PCA的列名，多个列名用逗号分隔。留空则处理所有数值列"
+                    "tooltip": "要进行PCA降维的列名，多个列名用逗号分隔。留空则处理所有数值列。"
                 }),
                 "标签列": ("STRING", {
                     "multiline": False,
                     "default": "",
-                    "tooltip": "标签列列名。可视化中不同类别将用不同颜色表示"
+                    "tooltip": "标签列列名。可视化中不同类别将用不同颜色表示。留空则用相同颜色。"
                 }),
             },
         }
 
     RETURN_TYPES = ("DATAFRAME",)
     RETURN_NAMES = ("数据帧",)
-    DESCRIPTION = cleandoc(__doc__ or "")
-    FUNCTION = "process"
 
-    CATEGORY = "数学建模/降维算法"
-
-
-    def process(self, 数据帧, 目标维度=2, 指定列="", 可视化类型="全部", 标签列=""):
+    def process(self, 数据帧, 目标维度=2, 处理列="", 标签列=""):
         df = 数据帧.copy()
         
         # 处理类别标签
@@ -65,8 +55,8 @@ class PCA:
             labels = df[标签列.strip()].values
         
         # 确定要处理的列
-        if 指定列.strip():
-            target_cols = [col.strip() for col in 指定列.split(',') if col.strip()]
+        if 处理列.strip():
+            target_cols = [col.strip() for col in 处理列.split(',') if col.strip()]
             invalid_cols = [col for col in target_cols if col not in df.columns]
             if invalid_cols:
                 raise ValueError(f"列名不存在: {invalid_cols}")
@@ -248,18 +238,14 @@ class PCA:
 
         visual = PCA_Visualization(self)
 
-        # 根据选择生成可视化
-        if 可视化类型 in ["全部", "碎石图"]:
-            visual.plot_scree(pca)
-            
-        if 可视化类型 in ["全部", "散点图"]:
-            visual.plot_scatter(transformed_data, labels)
-            
-        if 可视化类型 in ["全部", "热力图"]:
-            visual.plot_heatmap(pca, target_cols)
-            
-        if 可视化类型 in ["全部", "双标图"]:
-            visual.plot_biplot(pca, transformed_data, target_cols, labels)
+        # 碎石图
+        visual.plot_scree(pca)
+        # 散点图
+        visual.plot_scatter(transformed_data, labels)
+        # 热力图
+        visual.plot_heatmap(pca, target_cols)
+        # 双标图
+        visual.plot_biplot(pca, transformed_data, target_cols, labels)
         
         # 创建新的列名并添加转换后的数据
         new_cols = [f'PC{i+1}' for i in range(目标维度)]

@@ -20,10 +20,6 @@ class SelectColumns:
 
     RETURN_TYPES = ("DATAFRAME",)
     RETURN_NAMES = ("数据帧",)
-    DESCRIPTION = cleandoc(__doc__ or "")
-    FUNCTION = "process"
-
-    CATEGORY = "数学建模/数据预处理"
 
     def process(self, 数据帧, 列名):
         if not 列名.strip():
